@@ -116,6 +116,86 @@ local function pressPlayButton()
 end
 
 -- Function to specifically find 25x luck eggs
+-- Function to send Discord webhook notification
+local function sendDiscordNotification(eggInfo)
+    local jobId = game.JobId
+    local serverId = game.PlaceId
+    local serverStats = game:GetService("Players"):GetPlayers()
+    local currentPlayers = #serverStats
+    local maxPlayers = game:GetService("Players").MaxPlayers
+    
+    -- Get player name with censoring for privacy
+    local playerName = LocalPlayer.Name
+    local censoredName = string.sub(playerName, 1, 1) .. "***" .. string.sub(playerName, -1)
+    
+    -- Get current height (if applicable)
+    local height = "Unknown"
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        height = math.floor(LocalPlayer.Character.HumanoidRootPart.Position.Y) .. "m"
+    end
+    
+    -- Determine egg type based on name or appearance
+    local eggType = "Unknown Egg"
+    if eggInfo and eggInfo.Name then
+        if string.find(string.lower(eggInfo.Name), "rainbow") then
+            eggType = "Rainbow Egg"
+        elseif string.find(string.lower(eggInfo.Name), "golden") then
+            eggType = "Golden Egg"
+        elseif string.find(string.lower(eggInfo.Name), "lucky") then
+            eggType = "Lucky Egg"
+        else
+            eggType = eggInfo.Name .. " Egg"
+        end
+    end
+    
+    -- Create teleport script
+    local teleportScript = 'game:GetService("TeleportService"):TeleportToPlaceInstance(' .. 
+                           '"' .. PLACE_ID .. '", "' .. jobId .. '", game.Players.LocalPlayer)'
+    
+    -- Create webhook message
+    local webhookData = {
+        content = "",
+        embeds = {
+            {
+                title = "Egg Found 🎉",
+                description = "An egg with 25X Luck has been discovered!",
+                color = 16776960, -- Yellow color
+                fields = {
+                    {name = "Egg Type", value = eggType, inline = true},
+                    {name = "Luck", value = "x25", inline = true},
+                    {name = "Height", value = height, inline = true},
+                    {name = "Server Slots", value = currentPlayers .. "/" .. maxPlayers, inline = true},
+                    {name = "Time Remaining", value = "4 minutes", inline = true},
+                    {name = "Found By", value = censoredName, inline = true},
+                    {name = "Job ID", value = jobId, inline = false},
+                    {name = "Join Link", value = "Web Browser", inline = false},
+                    {name = "Teleport Script", value = "```lua\n" .. teleportScript .. "\n```", inline = false}
+                },
+                timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+            }
+        }
+    }
+    
+    -- Convert to JSON
+    local jsonData = HttpService:JSONEncode(webhookData)
+    
+    -- Send the webhook
+    local success, response = pcall(function()
+        return HttpService:PostAsync(
+            DISCORD_WEBHOOK_URL,
+            jsonData,
+            Enum.HttpContentType.ApplicationJson,
+            false
+        )
+    end)
+    
+    if success then
+        print("Discord notification sent successfully!")
+    else
+        print("Failed to send Discord notification: " .. tostring(response))
+    end
+end
+
 local function find25xLuckyEgg()
     print("Searching for 25x lucky eggs...")
     
@@ -153,12 +233,16 @@ local function find25xLuckyEgg()
                 if (obj:IsA("Model") or obj:IsA("BasePart") or obj:IsA("MeshPart")) and 
                    string.find(name, "25x") then
                     print("Found 25x luck egg: " .. obj.Name)
+                    -- Send Discord notification
+                    sendDiscordNotification(obj)
                     return obj
                 end
                 
                 -- Check by attributes for 25x
                 if obj:GetAttribute("Luck") == 25 or obj:GetAttribute("Multiplier") == 25 then
                     print("Found 25x egg by attribute: " .. obj.Name)
+                    -- Send Discord notification
+                    sendDiscordNotification(obj)
                     return obj
                 end
                 
@@ -166,6 +250,8 @@ local function find25xLuckyEgg()
                 local uiLabel = obj:FindFirstChild("LuckMultiplier") or obj:FindFirstChild("MultiplierLabel")
                 if uiLabel and uiLabel:IsA("TextLabel") and string.find(uiLabel.Text, "25x") then
                     print("Found 25x egg by UI label: " .. obj.Name)
+                    -- Send Discord notification
+                    sendDiscordNotification(obj)
                     return obj
                 end
             end
@@ -181,6 +267,8 @@ local function find25xLuckyEgg()
                 for i = 1, 5 do
                     if model and model.Parent and model.Parent:IsA("Model") then
                         print("Found potential 25x egg via GUI: " .. model.Parent.Name)
+                        -- Send Discord notification
+                        sendDiscordNotification(model.Parent)
                         return model.Parent
                     end
                     if model and model.Parent then
@@ -348,6 +436,43 @@ local function hopToNextServer()
         lastTeleport = tick()
         visitedServers[nextServer.id] = true
         
+        -- Send server hop notification to Discord
+        pcall(function()
+            local hopInfo = {
+                Name = "Server Hop"
+            }
+            
+            -- Create webhook message for server hopping
+            local webhookData = {
+                content = "",
+                embeds = {
+                    {
+                        title = "Server Hopping 🔄",
+                        description = "Moving to a new server to find 25x eggs...",
+                        color = 5814783, -- Blue color
+                        fields = {
+                            {name = "Current Server", value = game.JobId, inline = true},
+                            {name = "Target Server", value = nextServer.id, inline = true},
+                            {name = "Target Players", value = nextServer.playing .. "/" .. nextServer.maxPlayers, inline = true}
+                        },
+                        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+                    }
+                }
+            }
+            
+            -- Convert to JSON
+            local jsonData = HttpService:JSONEncode(webhookData)
+            
+            -- Send the webhook
+            HttpService:PostAsync(
+                DISCORD_WEBHOOK_URL,
+                jsonData,
+                Enum.HttpContentType.ApplicationJson,
+                false
+            )
+        end)
+        
+        -- Teleport to the new server
         pcall(function()
             TeleportService:TeleportToPlaceInstance(PLACE_ID, nextServer.id, LocalPlayer)
         end)
@@ -358,6 +483,9 @@ local function hopToNextServer()
     end
 end
 
+-- Keep track of already notified eggs to prevent duplicate notifications
+local notifiedEggs = {}
+
 local function mainLoop()
     -- First check if we need to press play
     pressPlayButton()
@@ -365,12 +493,42 @@ local function mainLoop()
     -- Wait a bit to ensure the game is fully loaded
     wait(5)
     
+    -- Send initial webhook with server information
+    pcall(function()
+        local serverInfo = {
+            Name = "Server Joined"
+        }
+        sendDiscordNotification(serverInfo)
+    end)
+    
     -- Now begin the egg finding loop
     while wait(1) do
         local foundEgg = find25xLuckyEgg()
         
         if foundEgg then
             print("Found a 25x lucky egg: " .. foundEgg.Name)
+            
+            -- Check if we've already notified about this egg to prevent spam
+            local eggIdentifier = foundEgg.Name .. "_" .. tostring(foundEgg:GetFullName())
+            if not notifiedEggs[eggIdentifier] then
+                notifiedEggs[eggIdentifier] = tick() -- Store when we found it
+                
+                -- Only keep track of the last 50 eggs to prevent memory buildup
+                if #notifiedEggs > 50 then
+                    local oldestTime = math.huge
+                    local oldestKey = nil
+                    for key, time in pairs(notifiedEggs) do
+                        if time < oldestTime then
+                            oldestTime = time
+                            oldestKey = key
+                        end
+                    end
+                    if oldestKey then
+                        notifiedEggs[oldestKey] = nil
+                    end
+                end
+            end
+            
             teleportToEgg(foundEgg)
             openEgg(foundEgg)
             wait(3)
