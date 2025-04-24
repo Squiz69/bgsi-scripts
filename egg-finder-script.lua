@@ -7,11 +7,11 @@ local LocalPlayer = Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
-getgenv().WEBHOOK = "INPUT_WEBHOOK_HERE"
+getgenv().WEBHOOK = "https://discord.com/api/webhooks/1363054781882699910/Qwa5roGAv5rj83wBwCG7BzraXD8xOc7L-eeopKGdvCSug1GhdJzx6sRRNA1tjgmbRW34"
 print(WEBHOOK)
 
 local PLACE_ID = 16302670534
-local egg_priority = "rainbow-egg"
+local egg_priority = "rainbow-egg","event-1"
 local egg_amount = 3
 local open_eggs = true
 local maxServerSearchTime = 10
