@@ -2,14 +2,15 @@ getgenv().config = {
     eggs = {
         ["rainbow-egg"] = "Rainbow Egg",
         ["event-1"] = "Bunny Egg",
-    --  ["event-2"] = "Pastel Egg",
+        ["event-2"] = "Pastel Egg",
         ["event-3"] = "Throwback Egg",
-   --   ["void-egg"] = "Void Egg",
-   --   ["nightmare-egg"] = "Nightmare Egg",
+ --     ["void-egg"] = "Void Egg",
+    --  ["nightmare-egg"] = "Nightmare Egg",
         ["aura-egg"] = "Aura Egg",
     };
     tween_speed = 30; -- in seconds, put this up if u are flinging or getting teleported back
     egg_amount = 3; -- the amount of eggs you want to open (MUST BE ABLE TO OPEN THIS MANY EGGS!!)
+    timeout = 600; -- in seconds, this will serverhop after 10 mins
 };
 
 repeat task.wait() until game:IsLoaded();
@@ -120,4 +121,9 @@ task.spawn(function()
     else
         SERVER_HOP:Normal(20);
     end;
+end);
+
+task.spawn(function()
+    task.wait(timeout + 60);
+    SERVER_HOP:Normal(20);
 end);
