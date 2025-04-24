@@ -8,7 +8,7 @@ local TweenService = game:GetService("TweenService")
 -- Configuration
 local DISCORD_WEBHOOK_URL = getgenv().Config and getgenv().Config.Webhook or "https://discord.com/api/webhooks/1363054781882699910/Qwa5roGAv5rj83wBwCG7BzraXD8xOc7L-eeopKGdvCSug1GhdJzx6sRRNA1tjgmbRW34"
 local PLACE_ID = 85896571713843
-local egg_priority = "rainbow-egg"  -- Updated priority egg to rainbow-egg
+local egg_priority = "event-1"  -- Updated priority egg to rainbow-egg
 local egg_amount = 3            -- How many eggs to open
 local open_eggs = true          -- Whether to open eggs
 local maxServerSearchTime = 10  -- Server search time in seconds
