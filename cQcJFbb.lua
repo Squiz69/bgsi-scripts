@@ -9,7 +9,7 @@ getgenv().config = {
         ["aura-egg"] = "Aura Egg",
     };
     tween_speed = 30; -- in seconds, put this up if u are flinging or getting teleported back
-    egg_amount = 1; -- the amount of eggs you want to open (MUST BE ABLE TO OPEN THIS MANY EGGS!!)
+    egg_amount = 3; -- the amount of eggs you want to open (MUST BE ABLE TO OPEN THIS MANY EGGS!!)
 };
 
 repeat task.wait() until game:IsLoaded();
