@@ -1,11 +1,11 @@
 getgenv().config = {
     eggs = {
-        ["rainbow-egg"] = "Rainbow Egg",
+       -- ["rainbow-egg"] = "Rainbow Egg",
         ["event-1"] = "Pastel Egg",
         ["event-2"] = "Bunny Egg",
         ["event-3"] = "Throwback Egg",
-        ["void-egg"] = "Void Egg",
-        ["nightmare-egg"] = "Nightmare Egg",
+     -- ["void-egg"] = "Void Egg",
+    --  ["nightmare-egg"] = "Nightmare Egg",
         ["aura-egg"] = "Aura Egg",
     };
     tween_speed = 30; -- in seconds, put this up if u are flinging or getting teleported back
