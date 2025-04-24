@@ -8,7 +8,7 @@ getgenv().config = {
     --  ["nightmare-egg"] = "Nightmare Egg",
         ["aura-egg"] = "Aura Egg",
     };
-    tween_speed = 50; -- in seconds, put this up if u are flinging or getting teleported back
+    tween_speed = 60; -- in seconds, put this up if u are flinging or getting teleported back
     egg_amount = 3; -- the amount of eggs you want to open (MUST BE ABLE TO OPEN THIS MANY EGGS!!)
 };
 
