@@ -10,7 +10,6 @@ getgenv().config = {
     };
     tween_speed = 30; -- in seconds, put this up if u are flinging or getting teleported back
     egg_amount = 5; -- the amount of eggs you want to open (MUST BE ABLE TO OPEN THIS MANY EGGS!!)
-    timeout = 600; -- in seconds, this will serverhop after 10 mins
 };
 
 repeat task.wait() until game:IsLoaded();
@@ -121,9 +120,4 @@ task.spawn(function()
     else
         SERVER_HOP:Normal(20);
     end;
-end);
-
-task.spawn(function()
-    task.wait(config.timeout + 60);
-    SERVER_HOP:Normal(20);
 end);
