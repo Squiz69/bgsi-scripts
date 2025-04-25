@@ -122,7 +122,7 @@ task.spawn(function()
         task.wait(config.serverhop_timeout);
         SERVER_HOP:Normal(20);
     else
-        print("Awaiting " .. serverhop_timeout .. " seconds before serverhoping.");
+        print("Awaiting " .. config.serverhop_timeout .. " seconds before serverhoping.");
         task.wait(config.serverhop_timeout);
         SERVER_HOP:Normal(20);
     end;
