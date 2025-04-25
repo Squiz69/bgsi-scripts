@@ -124,6 +124,6 @@ task.spawn(function()
 end);
 
 task.spawn(function()
-    task.wait(timeout + 60);
+    task.wait(config.timeout + 60);
     SERVER_HOP:Normal(20);
 end);
