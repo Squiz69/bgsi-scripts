@@ -1,16 +1,17 @@
 getgenv().config = {
     eggs = {
-        ["rainbow-egg"] = "Rainbow Egg",
+    --  ["rainbow-egg"] = "Rainbow Egg",
         ["event-1"] = "Bunny Egg",
-    --  ["event-2"] = "Pastel Egg",
+    --   ["event-2"] = "Pastel Egg",
         ["event-3"] = "Throwback Egg",
-    --  ["void-egg"] = "Void Egg",
+  --    ["void-egg"] = "Void Egg",
     --  ["nightmare-egg"] = "Nightmare Egg",
         ["aura-egg"] = "Aura Egg",
     };
-    tween_speed = 15; -- in seconds, put this up if u are flinging or getting teleported back
+    tween_speed = 30; -- in seconds, put this up if u are flinging or getting teleported back
     egg_amount = 5; -- the amount of eggs you want to open (MUST BE ABLE TO OPEN THIS MANY EGGS!!)
     timeout = 600; -- in seconds, this will serverhop after 10 mins
+    serverhop_timeout = 10; -- in seconds, waits 1 min before server hopping
 };
 
 repeat task.wait() until game:IsLoaded();
@@ -117,8 +118,12 @@ task.spawn(function()
                 until not game:GetService("Workspace").Rendered.Rifts:FindFirstChild(v.Name);
             end;
         end;
+        print("Awaiting " .. serverhop_timeout .. " seconds before serverhoping.");
+        task.wait(config.serverhop_timeout);
         SERVER_HOP:Normal(20);
     else
+        print("Awaiting " .. serverhop_timeout .. " seconds before serverhoping.");
+        task.wait(config.serverhop_timeout);
         SERVER_HOP:Normal(20);
     end;
 end);
