@@ -6,7 +6,7 @@ getgenv().config = {
         ["event-3"] = "Throwback Egg",
   --    ["void-egg"] = "Void Egg",
     --  ["nightmare-egg"] = "Nightmare Egg",
-        ["aura-egg"] = "Aura Egg",
+        ["silly-egg"] = "silly Egg",
     };
     tween_speed = 30; -- in seconds, put this up if u are flinging or getting teleported back
     egg_amount = 6; -- the amount of eggs you want to open (MUST BE ABLE TO OPEN THIS MANY EGGS!!)
