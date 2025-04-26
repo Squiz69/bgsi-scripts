@@ -118,7 +118,7 @@ task.spawn(function()
                 until not game:GetService("Workspace").Rendered.Rifts:FindFirstChild(v.Name);
             end;
         end;
-        print("Awaiting " .. serverhop_timeout .. " seconds before serverhoping.");
+        print("Awaiting " .. config.serverhop_timeout .. " seconds before serverhoping.");
         task.wait(config.serverhop_timeout);
         SERVER_HOP:Normal(20);
     else
