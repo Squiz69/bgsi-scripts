@@ -1,16 +1,16 @@
 getgenv().config = {
     eggs = {
         ["rainbow-egg"] = "Rainbow Egg",
-        ["event-1"] = "Bunny Egg",
-        ["event-2"] = "Pastel Egg",
         ["event-3"] = "Throwback Egg",
-  --    ["void-egg"] = "Void Egg",
+    --  ["void-egg"] = "Void Egg",
     --  ["nightmare-egg"] = "Nightmare Egg",
-        ["silly-egg"] = "silly Egg",
     };
-    tween_speed = 30; -- in seconds, put this up if u are flinging or getting teleported back
+    special_eggs = {
+        ["silly-egg"] = "Silly Egg",
+    };
+    tween_speed = 15; -- in seconds, put this up if u are flinging or getting teleported back
     egg_amount = 6; -- the amount of eggs you want to open (MUST BE ABLE TO OPEN THIS MANY EGGS!!)
-    timeout = 600; -- in seconds, this will serverhop after 10 mins
+    timeout = 540; -- in seconds, this will serverhop after 10 mins
     serverhop_timeout = 10; -- in seconds, waits 1 min before server hopping
 };
 
@@ -81,6 +81,9 @@ local function CheckX25Eggs()
                 table.insert(FoundEggs, v)
                 print("Found 25x luck egg: " .. v.Name);
             end;
+        elseif config.special_eggs[v.Name] then
+            table.insert(FoundEggs, v)
+            print("Found a Special Egg: " .. v.Name);
         end;
     end;
     
