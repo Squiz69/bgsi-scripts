@@ -3,7 +3,7 @@ getgenv().config = {
      -- ["rainbow-egg"] = "Rainbow Egg",
         ["event-3"] = "Throwback Egg",
     --  ["void-egg"] = "Void Egg",
-        ["nightmare-egg"] = "Nightmare Egg",
+    --  ["nightmare-egg"] = "Nightmare Egg",
     };
     special_eggs = {
         ["silly-egg"] = "Silly Egg",
